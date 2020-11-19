@@ -71,7 +71,7 @@
 		\tiny \bf 
 	\end{tabular}  }
 \fancyfoot{} % clear all footer fields
-\fancyfoot[L]{\scriptsize \ttfamily Assignment - Video Stream Programming, 2020 - 2021}
+\fancyfoot[L]{\scriptsize \ttfamily Assignment - Video Streaming with RTSP and RTP, 2020 - 2021}
 \fancyfoot[R]{\scriptsize \ttfamily Page {\thepage}/\pageref{LastPage}}
 \renewcommand{\headrulewidth}{0.3pt}
 \renewcommand{\footrulewidth}{0.3pt}
@@ -119,7 +119,7 @@ FACULTY OF COMPUTER SCIENCE \& ENGINEERNG
 \\
 \multicolumn{1}{l}{\textbf{{\Large Assignment}}}\\
 \\
-\textbf{\Huge Video Stream Programming}\\
+\textbf{\Huge Video Streaming with RTSP and RTP}\\
 \\
 \hline
 \end{tabular}
@@ -156,23 +156,24 @@ FACULTY OF COMPUTER SCIENCE \& ENGINEERNG
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-Chương trình gồm 5 files: \\
+\indent Trong bài tập lớn 1, chúng sẽ triển khai một video streaming Server và Client giao tiếp bằng Real-Time Streaming Protocol (RTSP) và gửi dữ liệu bằng Real-time Transport Protocol (RTP). Nhiệm vụ của chúng ta là triển khai giao thức RTSP trong Client và triển khai tạo nhịp RTP trong Server. Chúng ta sẽ cung cấp mã triển khai giao thức RTSP trong Server, khử nhịp độ RTP trong Client và đảm nhận việc hiển thị video đã truyền.\\
+\\
+Bài tập lớn gồm 5 files: \\
 \indent Client.py \\
 \indent ClientLauncher.py \\
 \indent RtpPacket.py \\
 \indent Server.py \\
-\indent ServerWorker.py \\
+\indent ServerWorker.py 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Running the code}
 
 \subsection{Server.py}
 
-Mẫu: \\
+Chạy Server.py: \\
 \indent python Server.py server\_port \\
 \indent or \\
-\indent Python Server.py server\_port \\
-\\
+\indent python3 Server.py server\_port \\
 
 \noindent Trong đó: \\
 \indent \textbf{server\_port} là cổng mà Server của bạn lắng nghe các kết nối RTSP đến.
@@ -184,13 +185,12 @@ Mẫu: \\
 
 \subsection{ClientLauncher.py}
 
-Mẫu: \\
+Chạy ClientLauncher.py: \\
 \indent python ClientLauncher.py server\_host server\_port RTP\_port name\_video\_file \\
 \indent or \\
-\indent Python ClientLauncher.py server\_host server\_port RTP\_port name\_video\_file \\
-\\
+\indent python3 ClientLauncher.py server\_host server\_port RTP\_port name\_video\_file \\
 
-\noindent Trong đó: \\
+\noindent Trong đó: 
 % \begin{enumerate}[\indent \arabic{enumi}.]
 \begin{itemize}
     \item \textbf{server\_host} \tab là địa chỉ IP của máy cục bộ. (VD:"127.0.0.1")
@@ -199,7 +199,24 @@ Mẫu: \\
     \item \textbf{name\_video\_file} là tên của video muốn xem (Vd: video.Mjpeg)
 \end{itemize}
 
-\section{Real Time Streaming Protocol (RTSP)}
+\subsection{Hướng dẫn sử dụng}
+\noindent Sử dụng 2 terminal (1 - Server, 1 - Client):\\
+
+Trong terminal thứ nhất, ta chạy dòng lệnh sau:
+\begin{lstlisting}[language=Python3]
+python Server.py 1025 
+\end{lstlisting}
+
+Trong terminal thứ hai, ta chạy dòng lệnh sau:
+\begin{lstlisting}
+python ClientLauncher.py 127.0.0.1 1025 8005 video.Mjpeg
+\end{lstlisting}
+\textbf{SETUP} để nhận video stream.\\
+\textbf{PLAY} để phát video.\\
+\textbf{PAUSE} để dừng video đang phát.\\
+\textbf{TEARDOWN} để đóng Client terminal.
+
+\section{Real-Time Streaming Protocol (RTSP)}
 \begin{itemize}
 \item Giao thức phát trực tuyến thời gian thực.\\
 \item Kiểm soát các streaming media server đối với hệ thống giải trí và truyền thông.\\
@@ -445,7 +462,7 @@ def openRtpPort(self):
             self.rtpSocket.bind((self.serverAddr,self.rtpPort))
             print ("Bind RtpPort Success")
         except:
-            tkMessageBox.showwarning('Unable to Bind', 'Unable to bind PORT=%d' %self.rtpPort)
+            tkinter.messagebox.showwarning('Unable to Bind', 'Unable to bind PORT=%d' %self.rtpPort)
 \end{lstlisting}
 
 \subsection{PLAY Command}
@@ -534,30 +551,35 @@ basicstyle=\footnotesize,
 breaklines=true
 }
 \begin{lstlisting}[language=Python]
-def encode(self, version, padding, extension, cc, seqnum, marker, pt, ssrc, payload):
-    timestamp = int(time())
-    self.header = bytearray(HEADER_SIZE)
-    self.header[0] = version << 6
-    self.header[0] = self.header[0] | padding << 5
-    self.header[0] = self.header[0] | extension << 4
-    self.header[0] = self.header[0] | cc
-    self.header[1] = marker
-    self.header[1] = self.header[1] | pt
-
-    self.header[2] = seqnum >> 8
-    self.header[3] = seqnum
-
-    self.header[4] = (timestamp >> 24) & 0xFF
-    self.header[5] = (timestamp >> 16) & 0xFF
-    self.header[6] = (timestamp >> 8) & 0xFF
-    self.header[7] = timestamp & 0xFF
-
-    self.header[8] = ssrc >> 24
-    self.header[9] = ssrc >> 16
-    self.header[10] = ssrc >> 8
-    self.header[11] = ssrc
-    
-    self.payload = payload
+class RtpPacket:
+    header = bytearray(HEADER_SIZE)
+    def __init__(self):
+        pass
+    def encode(self, version, padding, extension, cc, seqnum, marker, pt, ssrc, payload):
+        timestamp = int(time())
+        header = bytearray(HEADER_SIZE)
+        header[0] = header[0] | version << 6 # 2 bit
+        header[0] = header[0] | padding << 5 # 1 bit
+        header[0] = header[0] | extension << 4 # 1 bit
+        header[0] = header[0] | cc << 3 # 4 bit
+        
+        header[1] = header[1] | marker << 7 # 1 bit
+        header[1] = header[1] | pt #  7 bit
+        header[2] = (seqnum >> 8) & 0xFF # 16 bit, first 8
+        header[3] = seqnum & 0xFF # second 8
+        
+        header[4] = (timestamp >> 24) & 0xFF # 32 bit timestamp
+        header[5] = (timestamp >> 16) & 0xFF
+        header[6] = (timestamp >> 8) & 0xFF
+        header[7] = (timestamp >> 0) & 0xFF
+        
+        header[8] = (ssrc >> 24) & 0xFF # 32 bit ssrc
+        header[9] = (ssrc >> 16) & 0xFF
+        header[10] = (ssrc >> 8) & 0xFF
+        header[11] = (ssrc >> 0) & 0xFF
+        
+        self.header = header
+        self.payload = payload
 \end{lstlisting}
 
 \noindent Một RTP Packet sẽ bao gồm header và video frame sẽ được gửi đến RTP Port của Client.
@@ -640,7 +662,7 @@ elif self.requestSent == self.PAUSE:
 
 \subsection{TEARDOWN Command}
 
-Nếu lệnh TEARDOWN được gửi từ Client đến Server, nó sẽ ngăn Server gửi các video frame đến Client và đóng cả Client terminal.
+Nếu lệnh TEARDOWN được gửi từ Client đến Server, nó sẽ ngăn Server gửi các video frame đến Client và đóng tất cả Client terminal.
 
 \lstset{
 language=Python,

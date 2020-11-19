@@ -24,22 +24,22 @@ class RtpPacket:
 		
 		# Get the payload from the argument
 		# self.payload = ...
-		header[0] = header[0] | version << 6
-		header[0] = header[0] | padding << 5
-		header[0] = header[0] | extension << 4
-		header[0] = header[0] | cc << 3
+		header[0] = header[0] | version << 6 # 2 bit
+		header[0] = header[0] | padding << 5 # 1 bit
+		header[0] = header[0] | extension << 4 # 1 bi
+		header[0] = header[0] | cc << 3 # 4 bit
 
-		header[1] = header[1] | marker
-		header[1] = header[1] | pt
-		header[2] = (seqnum >> 8) & 0xFF
-		header[3] = seqnum & 0xFF
+		header[1] = header[1] | marker << 7 # 1 bit
+		header[1] = header[1] | pt # 7 bit
+		header[2] = (seqnum >> 8) & 0xFF # 16 bit, first 8
+		header[3] = seqnum & 0xFF # second 8
 
-		header[4] = (timestamp >> 24) & 0xFF
+		header[4] = (timestamp >> 24) & 0xFF # 32 bit timestamp
 		header[5] = (timestamp >> 16) & 0xFF
 		header[6] = (timestamp >> 8) & 0xFF
 		header[7] = (timestamp >> 0) & 0xFF
 
-		header[8] = (ssrc >> 24) & 0xFF
+		header[8] = (ssrc >> 24) & 0xFF # 32 bit ssrc
 		header[9] = (ssrc >> 16) & 0xFF
 		header[10] = (ssrc >> 8) & 0xFF
 		header[11] = (ssrc >> 0) & 0xFF
