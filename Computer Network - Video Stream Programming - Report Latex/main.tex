@@ -1,0 +1,685 @@
+\documentclass[a4paper]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{vietnam}
+\usepackage{minted}
+\usepackage{csvsimple}
+\usepackage{cases}
+%\usepackage{vntex}
+
+%\usepackage[english,vietnam]{babel}
+%\usepackage[utf8]{inputenc}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[francais]{babel}
+\usepackage{a4wide,amssymb,epsfig,latexsym,multicol,array,hhline,fancyhdr}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{lastpage}
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{listings}
+
+% Standard graphics package
+\usepackage{array}
+\usepackage{tabularx, caption}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{graphics}
+\usepackage[a4paper,left=2cm,right=2cm,top=1.8cm,bottom=2.8cm]{geometry}
+\usepackage{setspace}
+\usepackage{epsfig}
+\usepackage{tikz}
+\usetikzlibrary{arrows,snakes,backgrounds}
+\usepackage[unicode]{hyperref}
+%can file puenc.def trong thu muc goc de option [unicode] tao ra bookmark bang tieng Viet
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+%\usepackage{pstcol} 								
+% PSTricks with the standard color package
+
+\newtheorem{theorem}{{\bf Theorem}}
+\newtheorem{property}{{\bf Property}}
+\newtheorem{proposition}{{\bf Proposition}}
+\newtheorem{corollary}[proposition]{{\bf Corollary}}
+\newtheorem{lemma}[proposition]{{\bf Lemma}}
+
+
+%\usepackage{fancyhdr}
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{
+ \begin{tabular}{rl}
+    \begin{picture}(25,15)(0,0)
+    \put(0,-8){\includegraphics[width=8mm, height=8mm]{hcmut.png}}
+    %\put(0,-8){\epsfig{width=10mm,figure=hcmut.eps}}
+   \end{picture}&
+	%\includegraphics[width=8mm, height=8mm]{hcmut.png} & %
+	\begin{tabular}{l}
+		\textbf{\bf \ttfamily HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY, VNU-HCM}\\
+		\textbf{\bf \ttfamily FACULTY OF COMPUTER SCIENCE \& ENGINEERNG}
+	\end{tabular} 	
+ \end{tabular}
+}
+\fancyhead[R]{
+	\begin{tabular}{l}
+		\tiny \bf \\
+		\tiny \bf 
+	\end{tabular}  }
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\scriptsize \ttfamily Assignment - Video Stream Programming, 2020 - 2021}
+\fancyfoot[R]{\scriptsize \ttfamily Page {\thepage}/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+
+%%%
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY, VNU-HCM\\
+FACULTY OF COMPUTER SCIENCE \& ENGINEERNG
+\end{center}
+
+\vspace{1cm}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=3cm]{hcmut.png}
+\end{center}
+\end{figure}
+
+\vspace{1cm}
+
+
+\begin{center}
+\begin{tabular}{c}
+\multicolumn{1}{l}{\textbf{{\Large COMPUTER NETWORK}}}\\
+~~\\
+\hline
+\\
+\multicolumn{1}{l}{\textbf{{\Large Assignment}}}\\
+\\
+\textbf{\Huge Video Stream Programming}\\
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{3cm}
+
+\begin{table}[h]
+\begin{tabular}{rrl}
+
+\hspace{5 cm} & Tutor: & Bùi Xuân Giang\\
+& Class: & L05\\
+& Student members: & Huỳnh Phạm Phước Linh - 1710165 \\
+& & Trương Ngọc Trung Anh - 2020004 \\
+& & Lê Văn Phong - 1712607 \\
+
+
+\end{tabular}
+\end{table}
+
+\begin{center}
+{\footnotesize Ho Chi Minh, 11/2020}
+\end{center}
+\end{titlepage}
+
+
+%\thispagestyle{empty}
+\selectlanguage{english}
+\newpage
+\tableofcontents
+\newpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+Chương trình gồm 5 files: \\
+\indent Client.py \\
+\indent ClientLauncher.py \\
+\indent RtpPacket.py \\
+\indent Server.py \\
+\indent ServerWorker.py \\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Running the code}
+
+\subsection{Server.py}
+
+Mẫu: \\
+\indent python Server.py server\_port \\
+\indent or \\
+\indent Python Server.py server\_port \\
+\\
+
+\noindent Trong đó: \\
+\indent \textbf{server\_port} là cổng mà Server của bạn lắng nghe các kết nối RTSP đến.
+\begin{enumerate}[\indent \indent \alph{enumi}.]
+    \item Chúng ta có thể cho nó giá trị là 1025
+    \item Cổng RTSP tiêu chuẩn là 554
+    \item Giá trị được đặt cho server\_port phải lớn hơn 1024
+\end{enumerate}
+
+\subsection{ClientLauncher.py}
+
+Mẫu: \\
+\indent python ClientLauncher.py server\_host server\_port RTP\_port name\_video\_file \\
+\indent or \\
+\indent Python ClientLauncher.py server\_host server\_port RTP\_port name\_video\_file \\
+\\
+
+\noindent Trong đó: \\
+% \begin{enumerate}[\indent \arabic{enumi}.]
+\begin{itemize}
+    \item \textbf{server\_host} \tab là địa chỉ IP của máy cục bộ. (VD:"127.0.0.1")
+    \item \textbf{server\_port} là cổng mà Server đang lắng nghe. (Vd: 1025)
+    \item \textbf{RTP\_port} là cổng mà các gói RTP được nhận. (Vd: 8005)
+    \item \textbf{name\_video\_file} là tên của video muốn xem (Vd: video.Mjpeg)
+\end{itemize}
+
+\section{Real Time Streaming Protocol (RTSP)}
+\begin{itemize}
+\item Giao thức phát trực tuyến thời gian thực.\\
+\item Kiểm soát các streaming media server đối với hệ thống giải trí và truyền thông.\\
+\item Thiết lập và kiểm soát các media session giữa các điểm kết thúc.\\
+\item Sử dụng TCP.\\
+\end{itemize}
+
+
+\section{Real-time Transport Protocol (RTP)}
+\begin{itemize}
+\item Giao thức vận tải thời gian thực.\\
+\item Giao thức mạng để phân phối âm thanh và video qua IP Networks.\\
+\item Thiết lập và kiểm soát các media session giữa các điểm kết thúc.\\
+\item Sử dụng UDP.\\
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Python code}
+
+%% Python code %%
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+class ServerWorker:
+    SETUP = 'SETUP'
+    PLAY = 'PLAY'
+    PAUSE = 'PAUSE'
+    TEARDOWN = 'TEARDOWN'
+    
+    INIT = 0
+    READY = 1
+    PLAYING = 2
+    state = INIT
+	
+	OK_200 = 0
+    FILE_NOT_FOUND_404 = 1
+    CON_ERR_500 = 2
+\end{lstlisting}
+\\
+%% End python code %%
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+class Client:
+    INIT = 0
+    READY = 1
+    PLAYING = 2
+    state = INIT
+    
+    SETUP = 0
+    PLAY = 1
+    PAUSE = 2
+    TEARDOWN = 3
+\end{lstlisting}
+\\
+\tab Client sẽ gửi đến Server thông qua Giao thức RTSP là các lệnh như:
+\begin{itemize}
+    \item SETUP
+    \item PLAY
+    \item PAUSE
+    \item TEARDOWN
+\end{itemize}
+\\
+\tab Các lệnh này sẽ cho phía Server biết hành động tiếp theo mà nó sẽ hoàn thành.
+\tab Server sẽ trả lời Client thông qua Giao thức RTSP là các giá trị như:
+\begin{itemize}
+    \item OK\_200
+    \item FILE\_NOT\_FOUND\_404
+    \item CON\_ERR\_500
+\end{itemize}
+\\
+\subsection{SETUP Command}
+\tab Nếu lệnh SETUP được gửi từ Client đến Server.\\
+%% Python code %%
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def sendRtspRequest(self, requestCode):
+    if requestCode == self.SETUP and self.state == self.INIT:
+        threading.Thread(target=self.recvRtspReply).start()
+        
+        self.rtspSeq = 1
+        
+        request = "SETUP " + str(self.fileName) + "\n" + str(self.rtspSeq) + "\n" + " RTSP/1.0 RTP/UDP " + str(self.rtpPort)
+        
+        self.rtspSocket.send(request.encode('utf-8'))
+        
+        self.requestSent = self.SETUP
+\end{lstlisting}
+\\
+%% End python code %%
+Gói “SETUP” RTSP sẽ bao gồm:\\
+    \begin{itemize}
+        \item Lệnh SETUP
+	    \item Tên video
+	    \item RTSP Packet Sequence Number bắt đầu 1
+	    \item Protocol type: RTSP/1.0 RTP
+	    \item Transmission Protocol: UDP
+	    \item Cổng RTP để truyền luồng video
+    \end{itemize}
+%% Python code %%
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+# Process SETUP request
+    if requestType == self.SETUP:
+        if self.state == self.INIT:
+            # Update state
+            print("processing SETUP\n")
+			
+            try:
+                self.clientInfo['videoStream'] = VideoStream(filename)
+                self.state = self.READY
+            except IOError:
+                self.replyRtsp(self.FILE_NOT_FOUND_404, seq[1])
+            
+            # Generate a randomized RTSP session ID
+            self.clientInfo['session'] = randint(100000, 999999)
+			
+            # Send RTSP reply
+            self.replyRtsp(self.OK_200, seq[0])
+            
+            # Get the RTP/UDP port from the last line
+            self.clientInfo['rtpPort'] = request[2].split(' ')[3]
+
+\end{lstlisting}
+\\
+%% End python code %%
+Khi Server nhận được lệnh SETUP:
+\begin{itemize}
+    \item Gán cho Client một Specific Session Number ngẫu nhiên
+    \item Nếu lệnh hoặc trạng thái Server lỗi, trả gói ERROR lại cho Client
+    \item Nếu không có lỗi:\\
+    \begin{lstlisting}[language=Python]
+class VideoStream:
+    def __init__(self, filename):
+        self.filename = filename
+        try:
+    	    self.file = open(filename, 'rb')
+        except:
+    	    raise IOError
+        self.frameNum = 0
+    \end{lstlisting}
+    \tab Server sẽ mở tệp video được chỉ định trong gói SETUP và khởi tạo số khung hình video của nó bằng 0.
+    \tab Trả về OK\_200 cho Client và gán state = READY.
+\end{itemize}
+Client sẽ liên tục nhận Server's RTSP Reply
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def recvRtspReply(self):
+    while True:
+        reply = self.rtspSocket.recv(1024)
+        if reply:
+            self.parseRtspReply(reply.decode("utf-8"))
+        if self.requestSent == self.TEARDOWN:
+            self.rtspSocket.shutdown(socket.SHUT_RDWR)
+            self.rtspSocket.close()
+            break
+\end{lstlisting}
+Sau đó phân tích cú pháp của gói RTSP Reply, nhận Session Number
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def parseRtspReply(self, data):
+    lines = data.split('\n')
+    seqNum = int(lines[1].split(' ')[1])
+    if seqNum == self.rtspSeq:
+        session = int(lines[2].split(' ')[1])
+        if self.sessionId == 0:
+            self.sessionId = session
+\end{lstlisting}
+\\
+Nếu như gói Reply được phản hồi là lệnh SETUP thì Client sẽ đặt giá trị state = READY.
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+# Process only if the session ID is the same
+if self.sessionId == session:
+    if int(lines[0].split(' ')[1]) == 200:
+        if self.requestSent == self.SETUP:
+            print ("Updating RTSP state...")
+            self.state = self.READY
+            print ("Setting Up RtpPort for Video Stream")
+            self.openRtpPort() 
+        elif self.requestSent == self.PLAY:
+            self.state = self.PLAYING
+            print ('-'*60 + "\nClient is PLAYING...\n" + '-'*60)
+        elif self.requestSent == self.PAUSE:
+            self.state = self.READY
+            self.playEvent.set()
+        elif self.requestSent == self.TEARDOWN:
+            self.teardownAcked = 1 
+\end{lstlisting}
+Sau đó, mở cổng RTP để nhận video stream.
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def openRtpPort(self):
+    self.rtpSocket.settimeout(0.5)
+        try:
+            self.rtpSocket.bind((self.serverAddr,self.rtpPort))
+            print ("Bind RtpPort Success")
+        except:
+            tkMessageBox.showwarning('Unable to Bind', 'Unable to bind PORT=%d' %self.rtpPort)
+\end{lstlisting}
+
+\subsection{PLAY Command}
+Nếu lệnh PLAY được gửi từ Client đến Server
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+elif requestCode == self.PLAY and self.state == self.READY:
+    self.rtspSeq = self.rtspSeq + 1
+    request = "PLAY " + "\n" + str(self.rtspSeq)
+    self.rtspSocket.send(request.encode("utf-8"))
+    print ('-'*60 + "\nPLAY request sent to Server...\n" + '-'*60)
+    self.requestSent = self.PLAY
+\end{lstlisting}
+Server sẽ tạo một Socket truyền từ RTP qua UDP và bắt đầu gửi gói video stream
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+elif requestType == self.PLAY:
+    if self.state == self.READY:
+    print("processing PLAY\n")
+    self.state = self.PLAYING
+    self.clientInfo["rtpSocket"] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    self.replyRtsp(self.OK_200, seq[0])
+    self.clientInfo['event'] = threading.Event()
+    self.clientInfo['worker']= threading.Thread(target=self.sendRtp)
+    self.clientInfo['worker'].start()
+\end{lstlisting}
+VideoStream.py sẽ giúp cắt tệp video thành từng frame riêng biệt và đưa từng frame vào gói dữ liệu RTP
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def nextFrame(self):
+    data = self.file.read(5)
+    if data: 
+        framelength = int(data)
+        data = self.file.read(framelength)
+        self.frameNum += 1
+    return data
+\end{lstlisting}
+Mỗi gói dữ liệu cũng sẽ được mã hóa với một header, header sẽ bao gồm: RTP-version filed,	Padding, extension, Contributing source, Marker,	Type Field,	Sequence Number, Timestamp, SSRC, Payload).\\
+\begin{center}
+\begin{table}[h!]
+\centering
+\begin{tabular}{ | c | c | c | c | c | c | c | c | }
+ \hline
+ \multicolumn{8}{|c|}{RTP Packet Header} \\
+ \hline Bit Offset  & 0-1       & 2     & 3     & 4-7   & 8     & 9-15  & 16-31 \\
+ \hline 0           & Version   & P     & X     & CC    & M     & PT    & Sequence Number\\
+ \hline 32          & \multicolumn{7}{|c|}{Timestamp} \\
+ \hline 64          & \multicolumn{7}{|c|}{SSRC identifier} \\
+ \hline 
+ \multirow{2}{2.5cm}{\centering 96}
+                    & \multicolumn{7}{|c|}{CSRC identifiers} \\
+                    & \multicolumn{7}{|c|}{...}  \\
+ \hline 96+32xCC    & \multicolumn{6}{|c|}{Profile-specific extension header ID}    & Extension header length \\
+ \hline 
+  \multirow{2}{2.5cm}{\centering 128+32xCC}
+                    & \multicolumn{7}{|c|}{Extension header} \\
+                    & \multicolumn{7}{|c|}{...}  \\
+ \hline 
+\end{tabular}
+\end{table}
+\end{center}
+
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def encode(self, version, padding, extension, cc, seqnum, marker, pt, ssrc, payload):
+    timestamp = int(time())
+    self.header = bytearray(HEADER_SIZE)
+    self.header[0] = version << 6
+    self.header[0] = self.header[0] | padding << 5
+    self.header[0] = self.header[0] | extension << 4
+    self.header[0] = self.header[0] | cc
+    self.header[1] = marker
+    self.header[1] = self.header[1] | pt
+
+    self.header[2] = seqnum >> 8
+    self.header[3] = seqnum
+
+    self.header[4] = (timestamp >> 24) & 0xFF
+    self.header[5] = (timestamp >> 16) & 0xFF
+    self.header[6] = (timestamp >> 8) & 0xFF
+    self.header[7] = timestamp & 0xFF
+
+    self.header[8] = ssrc >> 24
+    self.header[9] = ssrc >> 16
+    self.header[10] = ssrc >> 8
+    self.header[11] = ssrc
+    
+    self.payload = payload
+\end{lstlisting}
+
+\noindent Một RTP Packet sẽ bao gồm header và video frame sẽ được gửi đến RTP Port của Client.
+
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def sendRtp(self):
+    while True:
+        self.clientInfo['event'].wait(0.05) 
+        if self.clientInfo['event'].isSet(): 
+            break 
+        data = self.clientInfo['videoStream'].nextFrame()
+        if data: 
+            frameNumber = self.clientInfo['videoStream'].frameNbr()
+            try:
+                address = self.clientInfo['rtspSocket'][1][0]
+                port = int(self.clientInfo['rtpPort'])
+                #================= Here =================#
+                self.clientInfo['rtpSocket'].sendto(self.makeRtp(data, frameNumber),(address,port))
+            except:
+                print("Connection Error")
+\end{lstlisting}
+
+Client sẽ decode RTP Packet để lấy header và video frame, tổ chức lại các frame và hiển thị trên giao diện người dùng (User Interface).
+
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+def decode(self, byteStream):
+    self.header = bytearray(byteStream[:HEADER_SIZE])
+    self.payload = byteStream[HEADER_SIZE:]
+\end{lstlisting}
+
+\subsection{PAUSE Command}
+
+\noindent Nếu lệnh PAUSE được gửi từ Client đến Server, nó sẽ dừng gửi các video frame từ Server đến Client.
+
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+elif requestCode == self.PAUSE and self.state == self.PLAYING:
+    self.rtspSeq = self.rtspSeq + 1
+    request = "PAUSE " + "\n" + str(self.rtspSeq)
+    self.rtspSocket.send(request.encode("utf-8"))
+    print ('-'*60 + "\nPAUSE request sent to Server...\n" + '-'*60)
+    self.requestSent = self.PAUSE
+\end{lstlisting}
+\\
+
+\noindent Nếu như gói Reply nhận lệnh PAUSE thì Client sẽ đặt giá trị state = READY.
+
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+elif self.requestSent == self.PAUSE:
+    self.state = self.READY
+\end{lstlisting}
+\\
+
+\subsection{TEARDOWN Command}
+
+Nếu lệnh TEARDOWN được gửi từ Client đến Server, nó sẽ ngăn Server gửi các video frame đến Client và đóng cả Client terminal.
+
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+elif requestCode == self.TEARDOWN and not self.state == self.INIT:
+    self.rtspSeq = self.rtspSeq + 1
+    request = "TEARDOWN " + "\n" + str(self.rtspSeq)
+    self.rtspSocket.send(request.encode("utf-8"))
+    print ('-'*60 + "\nTEARDOWN request sent to Server...\n" + '-'*60)
+    self.requestSent = self.TEARDOWN
+\end{lstlisting}
+\\
+
+\lstset{
+language=Python,
+frame=lines,
+label={lst:code_direct},
+basicstyle=\footnotesize,
+breaklines=true
+}
+\begin{lstlisting}[language=Python]
+elif self.requestSent == self.TEARDOWN:
+    self.teardownAcked = 1 
+\end{lstlisting}
+\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% References
+\begin{thebibliography}{80}
+
+
+\bibitem{http://wikipedia:2020} wikipedia.
+``\textbf{link: http://en.wikipedia.org/}'',
+\textit{}, last access: 15/11/2020.
+
+\end{thebibliography}
+\end{document}
+
