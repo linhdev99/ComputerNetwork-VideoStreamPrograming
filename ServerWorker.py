@@ -16,7 +16,7 @@ class ServerWorker:
 	PLAYING = 2
 	state = INIT
 
-	OK_200 = 0
+	OK_200 = 0	
 	FILE_NOT_FOUND_404 = 1
 	CON_ERR_500 = 2
 	
@@ -49,6 +49,7 @@ class ServerWorker:
 		
 		# Get the RTSP sequence number 
 		seq = request[1].split(' ')
+
 		
 		# Process SETUP request
 		if requestType == self.SETUP:
@@ -79,6 +80,7 @@ class ServerWorker:
 				
 				# Create a new socket for RTP/UDP
 				self.clientInfo["rtpSocket"] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+				print(self.clientInfo["rtpSocket"])
 				
 				self.replyRtsp(self.OK_200, seq[0])
 				

@@ -156,7 +156,15 @@ class Client:
 			# Write the RTSP request to be sent.
 			# request = ...
 			request = "SETUP " + str(self.fileName) + "\n" + str(self.rtspSeq) + "\n" + " RTSP/1.0 RTP/UDP " + str(self.rtpPort)
+			
+			# setup video.Mjpeg \n 
+			# 1 \n 
+			# RTSP/1.0 RTP/UDP 8005
+			
+			
+			
 			self.rtspSocket.send(request.encode('utf-8'))
+			print(request.encode("utf-8"))
 			# Keep track of the sent request.
 			# self.requestSent = ...
 			self.requestSent = self.SETUP
@@ -168,6 +176,10 @@ class Client:
 			# Write the RTSP request to be sent.
 			# request = ...
 			request = "PLAY " + "\n" + str(self.rtspSeq)
+
+			# Play \n
+			# 2
+
 			self.rtspSocket.send(request.encode("utf-8"))
 			print ('-'*60 + "\nPLAY request sent to Server...\n" + '-'*60)
 			# Keep track of the sent request.
@@ -223,6 +235,7 @@ class Client:
 	
 	def parseRtspReply(self, data):
 		"""Parse the RTSP reply from the server."""
+		print(data)
 		lines = data.split('\n')
 		seqNum = int(lines[1].split(' ')[1])
 		
